@@ -57,6 +57,7 @@ class AccumuloCoverageStore(val rasterStore: RasterStore,
   Hints.putSystemDefault(Hints.FORCE_LONGITUDE_FIRST_AXIS_ORDER, true)
   //TODO: WCS: remove if no longer needed
   rasterStore.ensureTableExists()
+  rasterStore.ensureBoundsTableExists()
 
   def getAuths = rasterStore.getAuths
 
@@ -133,6 +134,9 @@ object AccumuloCoverageStore extends Logging {
                                      writeThreadsConfig,
                                      queryThreadsConfig,
                                      collectStats)
+
+    // Create Bounds Store
+    rasterOps.ensureBoundsTableExists()
 
     val dsConnectConfig: Map[String, String] = Map(
       IngestRasterParams.ACCUMULO_INSTANCE -> instanceIdParam.lookUp(config).asInstanceOf[String],
