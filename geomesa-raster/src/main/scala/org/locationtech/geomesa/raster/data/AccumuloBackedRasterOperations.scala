@@ -139,13 +139,10 @@ class AccumuloBackedRasterOperations(val connector: Connector,
     image
   }
 
-<<<<<<< HEAD
-  def getRastersWithTiming(rasterQuery: RasterQuery)(implicit timings: TimingsImpl): Iterator[Raster] = {
-=======
+  // Full Raster Table Scan
   def getRasters() = getRasters(AllRasterQuery)
 
-  def getRasters(rasterQuery: RasterQuery): Iterator[Raster] = {
->>>>>>> wip_rastermr
+  def getRastersWithTiming(rasterQuery: RasterQuery)(implicit timings: TimingsImpl): Iterator[Raster] = {
     profile("scanning") {
       val batchScanner = connector.createBatchScanner(rasterTable, authorizationsProvider.getAuthorizations, numQThreads)
       val plan = profile(queryPlanner.getQueryPlan(rasterQuery, getResolutionAndGeoHashLengthMap), "planning")

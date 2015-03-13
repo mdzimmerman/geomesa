@@ -52,10 +52,15 @@ case class AccumuloRasterQueryPlanner(schema: RasterIndexSchema) extends Logging
     case lengthen if expectedLen > hash.length => new ARange(new Text(s"~$res~$hash"), new Text(s"~$res~$hash~"))
   }
 
-  def getQueryPlan(rq: RasterQuery, resAndGeoHashMap: ImmutableSetMultimap[Double, Int]): QueryPlan = {
+  def getQueryPlan(rq: RasterQuery, resAndGeoHashMap: ImmutableSetMultimap[Double, Int]): QueryPlan = rq match {
+      case bbres: BBOXResolutionRasterQuery => getBBOXResolutionQueryPlan(bbres, resAndGeoHashMap)
+      case AllRasterQuery => QueryPlan.fullTableScan
+      case _              => throw new Exception("Error, non-valid Raster Query Plan")
+    }
+
+  private def getBBOXResolutionQueryPlan(rq: BBOXResolutionRasterQuery, resAndGeoHashMap: ImmutableSetMultimap[Double, Int]): QueryPlan = {
     val availableResolutions = resAndGeoHashMap.keys.toList.distinct.sorted
 
-<<<<<<< HEAD
     // Step 1. Pick resolution
 
     val selectedRes: Double = selectResolution(rq.resolution, availableResolutions)
@@ -68,24 +73,6 @@ case class AccumuloRasterQueryPlanner(schema: RasterIndexSchema) extends Logging
     } else {
       GeoHashLenList.max
     }
-=======
-    rq match {
-      case bbres: BBOXResolutionRasterQuery => getBBOXResolutionQueryPlan(bbres)
-      case AllRasterQuery => QueryPlan.fullTableScan
-    }
-  }
-
-  def getBBOXResolutionQueryPlan(rq: BBOXResolutionRasterQuery): QueryPlan = {
-
-    // TODO: WCS: Improve this if possible
-    // ticket is GEOMESA-560
-    // note that this will only go DOWN in GeoHash resolution -- the enumeration will miss any GeoHashes
-    // that perfectly match the bbox or ones that fully contain it.
-    val closestAcceptableGeoHash = GeohashUtils.getClosestAcceptableGeoHash(rq.bbox).getOrElse(GeoHash("")).hash
-    val hashes = (BoundingBox.getGeoHashesFromBoundingBox(rq.bbox) :+ closestAcceptableGeoHash).toSet.toList
-    val res = lexiEncodeDoubleToString(rq.resolution)
-    logger.debug(s"Planner: BBox: ${rq.bbox} has geohashes: $hashes, and has encoded Resolution: $res")
->>>>>>> wip_rastermr
 
     // Step 3. Given an expected Length and the query, pad up or down the CAGH
     val closestAcceptableGeoHash = GeohashUtils.getClosestAcceptableGeoHash(rq.bbox)
@@ -112,15 +99,15 @@ case class AccumuloRasterQueryPlanner(schema: RasterIndexSchema) extends Logging
 
     // setup the RasterFilteringIterator
     val cfg = new IteratorSetting(90, "raster-filtering-iterator", classOf[RasterFilteringIterator])
-    configureRasterFilter(cfg, AccumuloRasterQueryPlanner.constructRasterFilter(rq.bbox.geom, indexSFT))
-    configureRasterMetadataFeatureType(cfg, indexSFT)
+    AccumuloRasterQueryPlanner.configureRasterFilter(cfg, AccumuloRasterQueryPlanner.constructRasterFilter(rq.bbox.geom, indexSFT))
+    AccumuloRasterQueryPlanner.configureRasterMetadataFeatureType(cfg, indexSFT)
 
     // TODO: WCS: setup a CFPlanner to match against a list of strings
     // ticket is GEOMESA-559
     QueryPlan(Seq(cfg), rows, Seq())
   }
 
-  def selectResolution(suggestedResolution: Double, availableResolutions: List[Double]): Double = {
+  private def selectResolution(suggestedResolution: Double, availableResolutions: List[Double]): Double = {
     logger.debug(s"RasterQueryPlanner: trying to get resolution $suggestedResolution " +
       s"from available Resolutions: ${availableResolutions.sorted}")
     val ret = availableResolutions match {
@@ -137,17 +124,6 @@ case class AccumuloRasterQueryPlanner(schema: RasterIndexSchema) extends Logging
     logger.debug(s"RasterQueryPlanner: Decided to use resolution: $ret")
     ret
   }
-
-  def configureRasterFilter(cfg: IteratorSetting, filter: Filter) = {
-    cfg.addOption(DEFAULT_FILTER_PROPERTY_NAME, ECQL.toCQL(filter))
-  }
-
-  def configureRasterMetadataFeatureType(cfg: IteratorSetting, featureType: SimpleFeatureType) = {
-    val encodedSimpleFeatureType = SimpleFeatureTypes.encodeType(featureType)
-    cfg.addOption(GEOMESA_ITERATORS_SIMPLE_FEATURE_TYPE, encodedSimpleFeatureType)
-    cfg.encodeUserData(featureType.getUserData, GEOMESA_ITERATORS_SIMPLE_FEATURE_TYPE)
-  }
-
 }
 
 object AccumuloRasterQueryPlanner {
@@ -157,6 +133,16 @@ object AccumuloRasterQueryPlanner {
     val property = ff.property(featureType.getGeometryDescriptor.getLocalName)
     val bounds = ff.literal(geom)
     ff.and(ff.intersects(property, bounds), ff.not(ff.touches(property, bounds)))
+  }
+
+  def configureRasterFilter(cfg: IteratorSetting, filter: Filter) = {
+    cfg.addOption(DEFAULT_FILTER_PROPERTY_NAME, ECQL.toCQL(filter))
+  }
+
+  def configureRasterMetadataFeatureType(cfg: IteratorSetting, featureType: SimpleFeatureType) = {
+    val encodedSimpleFeatureType = SimpleFeatureTypes.encodeType(featureType)
+    cfg.addOption(GEOMESA_ITERATORS_SIMPLE_FEATURE_TYPE, encodedSimpleFeatureType)
+    cfg.encodeUserData(featureType.getUserData, GEOMESA_ITERATORS_SIMPLE_FEATURE_TYPE)
   }
 
 }

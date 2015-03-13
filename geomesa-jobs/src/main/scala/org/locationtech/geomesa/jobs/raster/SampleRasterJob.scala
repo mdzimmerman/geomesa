@@ -55,8 +55,6 @@ class SampleRasterJob(args: Args) extends Job(args) {
 //  lazy val password         = args(ConnectionParams.ACCUMULO_PASSWORD)
   //lazy val tablename        = args(ConnectionParams.CATALOG_TABLE)
 
-  //val tablename = "AANNEX_SRI_ALL_VIS_RASTERS"
-
   val inputTable = "jnh_color"
   val outputTable = "jnh_grayscale"
   //lazy val input   = AccumuloInputOptions(inputTable, authorizations = new Authorizations("S", "USA"))
@@ -128,8 +126,6 @@ object GrayscaleJob {
     val grayRaster = Raster(grayScale, raster.metadata, raster.resolution)
 
     val (nk, nv) = schema.encode(grayRaster)
-
-    //val grayBytes = Raster.encodeToBytes(grayRaster)
 
     val m = new Mutation(nk.getRow)
     m.put(nk.getColumnFamily, nk.getColumnQualifier, nk.getColumnVisibilityParsed, nv)
