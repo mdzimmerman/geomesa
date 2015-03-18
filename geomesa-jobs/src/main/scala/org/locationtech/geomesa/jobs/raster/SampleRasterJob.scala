@@ -47,66 +47,7 @@ object RasterJobResources {
   }
 }
 
-class SampleRasterJob(args: Args) extends Job(args) {
 
-//  lazy val zookeepers       = args(ConnectionParams.ZOOKEEPERS)
-//  lazy val instance         = args(ConnectionParams.ACCUMULO_INSTANCE)
-//  lazy val user             = args(ConnectionParams.ACCUMULO_USER)
-//  lazy val password         = args(ConnectionParams.ACCUMULO_PASSWORD)
-  //lazy val tablename        = args(ConnectionParams.CATALOG_TABLE)
-
-  val inputTable = "jnh_color"
-  val outputTable = "jnh_grayscale"
-  //lazy val input   = AccumuloInputOptions(inputTable, authorizations = new Authorizations("S", "USA"))
-  lazy val input   = AccumuloInputOptions(inputTable)
-  lazy val output  = AccumuloOutputOptions(outputTable)
-  lazy val options = AccumuloSourceOptions("dcloud", "dzoo1", "root", "secret", input, output)
-
-  //println(s"Args decode to $zookeepers $instance $user $password $inputTable")
-
-//  AccumuloSource(options)
-//    .map(('key, 'value) -> ('line, 'number)) {
-//    (kv: (Key, Value)) => ("foo", 2)
-//  }.write(TextLine("hdfs://dhead:54310/tmp/jnh-test/output"))
-
-//  AccumuloSource(options)
-//    .mapTo('line) {
-//      (kv: (Key, Value)) => s"rowId ${kv._1.getRow}"
-//  }.write(TextLine("hdfs://dhead:54310/tmp/jnh-test/output"))
-
-//  AccumuloSource(options)
-//    .mapTo('mutation) {
-//    (kv: (Key, Value)) => SampleRasterJob.kvToMutation(kv._1, kv._2)
-//  }.write(AccumuloSource(options))
-//
-////  // Working Grayscale code
-//  AccumuloSource(options)
-//    .map(('key, 'value) -> 'mutation) {
-//      (kv: (Key, Value)) => {
-//        GrayscaleJob.colorKVtoGrayScaleMutation(kv._1, kv._2)
-//      }
-//  }.write(AccumuloSource(options))
-
-  // Working Grayscale code
- val a =   AccumuloSource(options)
-    .mapTo[Array[Int]]('hist) {
-      (kv: (Key, Value)) => {
-        HistogramJob.kvToHistogram(kv._1, kv._2)
-      }
-  }.groupAll {
-    _.reduce[Array[Int]]('hist -> 'totalHist) {
-      (h1: Array[Int], h2: Array[Int]) => HistogramJob.addBins(h1, h2)
-    }
-  }.mapTo[Array[Int], String]('totalHist -> 'line) {
-    (array: Array[Int]) => s"Histogram = Array(${array.mkString(",")})"
-  }.write(TextLine("hdfs://dhead:54310/tmp/jnh-test/output/histogram"))
-
-//    .groupAll { _.reduce[Array[Int]]('hist -> 'totHist) {
-//    (h1: Array[Int], h2: Array[Int]) => HistogramJob.addBins(h1, h2)
-//  }
-//  }.write(TextLine("hdfs://dhead:54310/tmp/jnh-test/output/histogram"))
-
-}
 
 object RasterJobs {
   val schema = RasterIndexSchema("")
@@ -150,11 +91,8 @@ object HistogramJob {
   def addBins[T : Numeric : ClassTag](a: Array[T], b: Array[T]): Array[T] = {
     require(a.length == b.length)
     val op = implicitly[Numeric[T]]
-
     val ret = new Array[T](a.length)
-
     var i = 0
-
     while(i < a.length) {
       ret(i) = op.plus(a(i), b(i))
       i += 1
@@ -164,6 +102,33 @@ object HistogramJob {
 
 }
 
+class SampleRasterJob(args: Args) extends Job(args) {
+
+  lazy val zookeepers       = args(RasterConnectionParams.ZOOKEEPERS)
+  lazy val instance         = args(RasterConnectionParams.ACCUMULO_INSTANCE)
+  lazy val user             = args(RasterConnectionParams.ACCUMULO_USER)
+  lazy val password         = args(RasterConnectionParams.ACCUMULO_PASSWORD)
+  lazy val inputTable       = args(RasterConnectionParams.INPUT_TABLE)
+  lazy val outputTable      = args(RasterConnectionParams.OUTPUT_TABLE)
+
+  lazy val input   = AccumuloInputOptions(inputTable)
+  lazy val output  = AccumuloOutputOptions(outputTable)
+  lazy val options = AccumuloSourceOptions(instance, zookeepers, user, password, input, output)
+
+  AccumuloSource(options)
+    .mapTo[Array[Int]]('hist) {
+    (kv: (Key, Value)) => {
+      HistogramJob.kvToHistogram(kv._1, kv._2)
+    }
+  }.groupAll {
+    _.reduce[Array[Int]]('hist -> 'totalHist) {
+      (h1: Array[Int], h2: Array[Int]) => HistogramJob.addBins(h1, h2)
+    }
+  }.mapTo[Array[Int], String]('totalHist -> 'line) {
+    (array: Array[Int]) => s"Histogram = Array(${array.mkString(",")})"
+  }.write(TextLine(s"hdfs://dhead:54310/tmp/$outputTable/output/histogram"))
+
+}
 
 object SampleRasterJob {
 
@@ -175,8 +140,7 @@ object SampleRasterJob {
   }
 
   val conf = new Configuration
-  conf.set("accumulo.monitor.address", "damaster"
-  )
+  conf.set("accumulo.monitor.address", "damaster")
   conf.set("mapreduce.framework.name", "yarn")
   conf.set("yarn.resourcemanager.address", "dresman:8040")
   conf.set("fs.defaultFS", "hdfs://dhead:54310")
@@ -185,22 +149,27 @@ object SampleRasterJob {
   def runJob() = {
     JobUtils.setLibJars(conf)
 
-    val args = new collection.mutable.ListBuffer[String]()
-
-    args.append("--" + ConnectionParams.ZOOKEEPERS, "dzoo1")
-    args.append("--" + ConnectionParams.ACCUMULO_INSTANCE, "dcloud")
-    args.append("--" + ConnectionParams.ACCUMULO_USER, "root")
-    args.append("--" + ConnectionParams.ACCUMULO_PASSWORD, "secret")
-    //args.append("--" + ConnectionParams.CATALOG_TABLE, "AANNEX_SRI_ALL_VIS_RASTERS")
-
-    val args2 = Args(args)
+    val args = buildArgs()
 
     val hdfsMode = Hdfs(strict = true, conf)
-    val arguments = Mode.putMode(hdfsMode, args2)
+    val arguments = Mode.putMode(hdfsMode, args)
 
     val job = new SampleRasterJob(arguments)
     val flow = job.buildFlow
     flow.complete() // this blocks until the job is done
+  }
+
+  def buildArgs(): Args = {
+    val args = new collection.mutable.ListBuffer[String]()
+
+    args.append("--" + RasterConnectionParams.ZOOKEEPERS, "dzoo1")
+    args.append("--" + RasterConnectionParams.ACCUMULO_INSTANCE, "dcloud")
+    args.append("--" + RasterConnectionParams.ACCUMULO_USER, "root")
+    args.append("--" + RasterConnectionParams.ACCUMULO_PASSWORD, "secret")
+    args.append("--" + RasterConnectionParams.INPUT_TABLE, "AANNEX_SRI_ALL_VIS_RASTERS")
+    args.append("--" + RasterConnectionParams.OUTPUT_TABLE, "AANNEX_SRI_ALL_VIS_RASTERS")
+
+    Args(args)
   }
 
 }

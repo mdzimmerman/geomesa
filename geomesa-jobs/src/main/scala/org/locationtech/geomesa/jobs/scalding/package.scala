@@ -34,16 +34,25 @@ package object scalding {
   type AccTap = Tap[JobConf, KVRecordReader, MutOutputCollector]
   type AccScheme = Scheme[JobConf, KVRecordReader, MutOutputCollector, Array[Any], Array[Any]]
 
-  object ConnectionParams {
+  object ConnectionParams extends CommonConnectionParams {
+    val FEATURE_NAME        = "geomesa.feature.name"
+    val CATALOG_TABLE       = "geomesa.feature.tables.catalog"
+    val RECORD_TABLE        = "geomesa.feature.tables.record"
+    val ATTRIBUTE_TABLE     = "geomesa.feature.tables.attribute"
+  }
+
+  object RasterConnectionParams extends CommonConnectionParams {
+    val INPUT_TABLE         = "geomesa.raster.table.input"
+    val OUTPUT_TABLE        = "geomesa.raster.table.output"
+  }
+
+  trait CommonConnectionParams {
     val ACCUMULO_INSTANCE   = "geomesa.accumulo.instance"
     val ZOOKEEPERS          = "geomesa.accumulo.zookeepers"
     val ACCUMULO_USER       = "geomesa.accumulo.user"
     val ACCUMULO_PASSWORD   = "geomesa.accumulo.password"
     val AUTHORIZATIONS      = "geomesa.accumulo.authorizations"
     val VISIBILITIES        = "geomesa.accumulo.visibilities"
-    val FEATURE_NAME        = "geomesa.feature.name"
-    val CATALOG_TABLE       = "geomesa.feature.tables.catalog"
-    val RECORD_TABLE        = "geomesa.feature.tables.record"
-    val ATTRIBUTE_TABLE     = "geomesa.feature.tables.attribute"
   }
+
 }
