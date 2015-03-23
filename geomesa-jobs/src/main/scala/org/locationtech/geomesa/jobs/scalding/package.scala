@@ -44,6 +44,7 @@ package object scalding {
   object RasterConnectionParams extends CommonConnectionParams {
     val INPUT_TABLE         = "geomesa.raster.table.input"
     val OUTPUT_TABLE        = "geomesa.raster.table.output"
+    val HDFS_DEFAULT        = "geomesa.fs.defaultFS"
   }
 
   trait CommonConnectionParams {
