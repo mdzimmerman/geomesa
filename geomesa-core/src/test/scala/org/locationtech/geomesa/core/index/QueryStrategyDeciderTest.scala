@@ -30,7 +30,7 @@ import org.specs2.runner.JUnitRunner
 import scala.reflect.ClassTag
 
 //Expand the test - https://geomesa.atlassian.net/browse/GEOMESA-308
-@RunWith(classOf[JUnitRunner])
+//@RunWith(classOf[JUnitRunner])
 class QueryStrategyDeciderTest extends Specification {
 
   val sftIndex = new SftBuilder()

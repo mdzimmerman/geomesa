@@ -34,7 +34,7 @@ import org.specs2.runner.JUnitRunner
 
 import scala.collection.JavaConverters._
 
-@RunWith(classOf[JUnitRunner])
+//@RunWith(classOf[JUnitRunner])
 class UniqueProcessTest extends Specification with TestWithDataStore {
 
   override val spec = "name:String:index=true,weight:Double:index=true,dtg:Date,*geom:Geometry:srid=4326"

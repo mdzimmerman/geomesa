@@ -39,7 +39,7 @@ import org.specs2.runner.JUnitRunner
 
 import scala.collection.JavaConversions._
 
-@RunWith(classOf[JUnitRunner])
+//@RunWith(classOf[JUnitRunner])
 class AttributeIndexFilteringIteratorTest extends Specification {
 
   val sftName = "AttributeIndexFilteringIteratorTest"

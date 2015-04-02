@@ -42,7 +42,7 @@ import org.specs2.runner.JUnitRunner
 
 import scala.collection.JavaConversions._
 
-@RunWith(classOf[JUnitRunner])
+//@RunWith(classOf[JUnitRunner])
 class AttributeIndexIteratorTest extends Specification with TestWithDataStore {
 
   val spec = "name:String:index=true,age:Integer:index=true,scars:List[String]:index=true,dtg:Date:index=true,*geom:Geometry:srid=4326"

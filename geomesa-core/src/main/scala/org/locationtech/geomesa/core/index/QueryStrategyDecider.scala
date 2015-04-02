@@ -34,19 +34,22 @@ object QueryStrategyDecider {
   val OPTIMAL_COST = 10
 
   def chooseStrategy(sft: SimpleFeatureType, query: Query, hints: StrategyHints, version: Int): Strategy = {
+    new STIdxStrategy
     // check for density queries
-    if (query.getHints.containsKey(BBOX_KEY) || query.getHints.contains(TIME_BUCKETS_KEY)) {
-      // TODO GEOMESA-322 use other strategies with density iterator
-      return new STIdxStrategy
-    }
+//    if (query.getHints.containsKey(BBOX_KEY) || query.getHints.contains(TIME_BUCKETS_KEY)) {
+//      // TODO GEOMESA-322 use other strategies with density iterator
+//      new STIdxStrategy
+//    } else {
+//      new RecordIdxStrategy
+//    }
 
-    query.getFilter match {
-      case id: Id   => new RecordIdxStrategy
-      case and: And => processFilters(decomposeAnd(and), sft, hints)
-      case cql =>
-        // a single clause - check for indexed attributes or fall back to spatio-temporal
-        AttributeIndexStrategy.getStrategy(cql, sft, hints).map(_.strategy).getOrElse(new STIdxStrategy)
-    }
+//    query.getFilter match {
+//      case id: Id   => new RecordIdxStrategy
+//      case and: And => processFilters(decomposeAnd(and), sft, hints)
+//      case cql =>
+//        // a single clause - check for indexed attributes or fall back to spatio-temporal
+//        AttributeIndexStrategy.getStrategy(cql, sft, hints).map(_.strategy).getOrElse(new STIdxStrategy)
+//    }
   }
 
   /**
