@@ -1,0 +1,26 @@
+Getting Started
+===============
+
+License
+-------
+
+Community and Support
+---------------------
+
+Prerequisites and Platform
+--------------------------
+
+Installing from Binary Distributions
+------------------------------------
+
+Building from Source
+--------------------
+
+Configuring for Accumulo
+------------------------
+
+Configuring for Kafka
+---------------------
+
+Installing the GeoMesa GeoServer plugin
+---------------------------------------

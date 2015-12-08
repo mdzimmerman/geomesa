@@ -2,11 +2,13 @@ build/zinc*
 build/scala*
 build/*.jar
 build/build.out
+docs/_build
 *.iws
 *.ipr
 *.iml
 *.idea/
 *.log
+.*.swp
 .idea/**
 **/.classpath
 **/.project
