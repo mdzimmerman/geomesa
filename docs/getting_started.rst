@@ -4,19 +4,49 @@ Getting Started
 Prerequisites and Platform
 --------------------------
 
-GeoMesa requires 
-
 .. warning::
 
-    For Accumulo 
+    GeoMesa requires Accumulo (http://accumulo.apache.org/) 1.5 or 1.6, which in turn
+    requires Hadoop (http://hadoop.apache.org/) 2.2 or better and ZooKeeper (http://zookeeper.apache.org) 
+    3.4.5 or better. Installing and configuring Accumulo is beyond the scope of this tutorial.
 
-GeoMesa artifacts are available for download, or can be built from source. 
+    Using the Kafka (http://kafka.apache.org/) module requires Kafka 0.8.2 and ZooKeeper 3.4.5
+    or better.  
 
-Building from source:
+To install the binary distribution:
+
+* Java JRE or JDK 7
+
+To build and install the source distribution:
+
+* Java JDK 7
+* Apache Maven (http://maven.apache.org/) 3.2.2 or better
+* A ``git`` client (http://git-scm.com/)
+
+Versions and Downloads
+----------------------
 
 .. note::
 
-    In the shell commands code below, ``$GEOMES`` refers to the GeoMesa version, currently "|version|".
+    The current recommended version is |version|.
+
+**Latest release**: 1.1.0-rc.6
+
+* Release tarball: http://repo.locationtech.org/content/repositories/geomesa-releases/org/locationtech/geomesa/geomesa-assemble/1.1.0-rc.6/geomesa-assemble-1.1.0-rc.6-bin.tar.gz
+* Source: https://github.com/locationtech/geomesa/archive/geomesa-1.1.0-rc.6.tar.gz
+
+**Development version (source only)**: 1.1.0-rc.7-SNAPSHOT
+
+* Source: https://github.com/locationtech/geomesa/archive/master.tar.gz
+
+**1.0.x release**: geomesa-accumulo1.5-1.0.0-rc.7 
+
+* Source: https://github.com/locationtech/geomesa/releases/tag/geomesa-accumulo1.5-1.0.0-rc.7
+* Release tarball: https://repo.locationtech.org/content/repositories/geomesa-releases/org/locationtech/geomesa/geomesa-assemble-accumulo1.5/1.0.0-rc.7/geomesa-assemble-accumulo1.5-1.0.0-rc.7-bin.tar.gz
+
+GeoMesa artifacts can be downloaded from the LocationTech Maven repository: https://repo.locationtech.org/content/repositories/geomesa-releases/.
+
+Snapshots are available in the LocationTech Snapshots Repositor: https://repo.locationtech.org/content/repositories/geomesa-snapshots/.
 
 Installing from the Binary Distribution
 ---------------------------------------
@@ -40,12 +70,7 @@ and untar it somewhere convenient.
 Building from Source
 --------------------
 
-Requirements:
 
-* [Java JDK 7](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
-* [Apache Maven](http://maven.apache.org/) 3.2.2 or later
-* [git](http://git-scm.com/)
-* [Accumulo](http://accumulo.apache.org) version 1.5.x or 1.6.x and/or [Kafka](http://kafka.apache.org/) version 0.8.2.x.
 
 The GeoMesa source distribution may be cloned from GitHub:
 

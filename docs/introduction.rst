@@ -12,31 +12,8 @@ geospatial data stored in Accumulo via standards-based OGC HTTP services and
 cluster monitoring and management tools within the GeoServer administrative
 interface. 
 
-
-
 Versions and Downloads
 ----------------------
-
-**Latest release**: 1.1.0-rc.6 
-* [![Build Status](https://api.travis-ci.org/locationtech/geomesa.svg?branch=geomesa-1.1.0-rc.6)](https://travis-ci.org/locationtech/geomesa) 
-* [Release tarball](http://repo.locationtech.org/content/repositories/geomesa-releases/org/locationtech/geomesa/geomesa-assemble/1.1.0-rc.6/geomesa-assemble-1.1.0-rc.6-bin.tar.gz)
-* [Source](https://github.com/locationtech/geomesa/archive/geomesa-1.1.0-rc.6.tar.gz)
-
-**Development version (source only)**: 1.1.0-rc.7-SNAPSHOT
-* [![Build Status](https://api.travis-ci.org/locationtech/geomesa.svg?branch=master)](https://travis-ci.org/locationtech/geomesa)
-* [Source](https://github.com/locationtech/geomesa/archive/master.tar.gz)
-
-**1.0.x release**: geomesa-accumulo1.5-1.0.0-rc.7 
-* [![Build Status](https://travis-ci.org/locationtech/geomesa.svg?branch=accumulo1.5.x%2F1.x)](https://travis-ci.org/locationtech/geomesa) 
-* [Source](https://github.com/locationtech/geomesa/releases/tag/geomesa-accumulo1.5-1.0.0-rc.7)
-* [Release tarball](https://repo.locationtech.org/content/repositories/geomesa-releases/org/locationtech/geomesa/geomesa-assemble-accumulo1.5/1.0.0-rc.7/geomesa-assemble-accumulo1.5-1.0.0-rc.7-bin.tar.gz)  
-
-<b>NOTE:</b> The current recommended version is `1.1.0-rc.6`. The most recent tar.gz assembly can be 
-[downloaded here](http://repo.locationtech.org/content/repositories/geomesa-releases/org/locationtech/geomesa/geomesa-assemble/1.1.0-rc.6/geomesa-assemble-1.1.0-rc.6-bin.tar.gz) which contains the [Accumulo distributed runtime jar](geomesa-distributed-runtime), [GeoServer plugin](geomesa-plugin), and [command line tools](geomesa-tools).
-
-GeoMesa artifacts can be downloaded from the [LocationTech Maven repository](https://repo.locationtech.org/content/repositories/geomesa-releases/)
-
-Snapshots are available in the [LocationTech Snapshots Repository](https://repo.locationtech.org/content/repositories/geomesa-snapshots/)
 
 ## Documentation
 
@@ -46,41 +23,14 @@ Snapshots are available in the [LocationTech Snapshots Repository](https://repo.
 * GeoMesa [Users](https://locationtech.org/mhonarc/lists/geomesa-users/) and [Dev](https://locationtech.org/mhonarc/lists/geomesa-dev/) mailing list archives
 * READMEs are provided under most modules: [Tools](geomesa-tools), [Jobs](geomesa-jobs), etc
 
-## GeoMesa Project Structure
-
-* [**geomesa-accumulo**](geomesa-accumulo/geomesa-accumulo-datastore): the implementations of the core Accumulo indexing structures, Accumulo iterators, and the GeoTools interfaces for exposing the functionality as a `DataStore` to both application developers and GeoServer.
-* **geomesa-assemble**: packages the GeoMesa distributed runtime, GeoMesa GeoServer plugin, and GeoMesa Tools. You can manually assemble using the `assemble.sh` script contained in the module.
-* [**geomesa-compute**](geomesa-compute): utilities for working with distributed computing environments. Currently, there are methods for instantiating an Apache Spark Resilient Distributed Dataset from a CQL query against data stored in GeoMesa. Eventually, this project will contain bindings for traditional map-reduce processing, Scalding, and other environments.
-* [**geomesa-convert**](geomesa-convert): a configurable and extensible library for converting data into SimpleFeatures.
-* **geomesa-distributed-runtime**: assembles a jar with dependencies that must be distributed to Accumulo tablet servers lib/ext directory or to an HDFS directory where Accumulo's VFSClassLoader can pick it up.
-* **geomesa-examples**: includes Developer quickstart tutorials and examples for how to work with GeoMesa in Accumulo and Kafka.
-* **geomesa-features**: includes code for serializing SimpleFeatures and custom SimpleFeature implementations designed for GeoMesa.
-* **geomesa-filter**: a library for manipulating and working with GeoTools Filters.
-* **geomesa-hbase**: an implementation of GeoMesa on HBase and Google Cloud Bigtable.
-* [**geomesa-jobs**](geomesa-jobs): map/reduce and scalding jobs for maintaining GeoMesa.
-* [**geomesa-kafka**](geomesa-kafka/geomesa-kafka-datastore): an implementation of GeoMesa in Kafka for maintaining near-real-time caches of streaming data.
-* [**geomesa-plugin**](geomesa-plugin): creates a plugin which provides WFS and WMS support. The JAR named geomesa-plugin-<Version>-geoserver-plugin.jar is ready to be deployed in GeoServer by copying it into geoserver/WEB-INF/lib/
-* [**geomesa-process**](geomesa-process): analytic processes optimized on GeoMesa data stores.
-* [**geomesa-raster**](geomesa-raster): adds support for ingesting and working with geospatially-referenced raster data in GeoMesa.
-* **geomesa-security**: adds support for managing security and authorization levels for data stored in GeoMesa. 
-* [**geomesa-stream**](geomesa-stream): a GeoMesa library that provides tools to process streams of `SimpleFeatures`.
-* [**geomesa-tools**](geomesa-tools): a set of command line tools for managing features, ingesting and exporting data, configuring tables, and explaining queries in GeoMesa.
-* [**geomesa-utils**](geomesa-utils): stores our GeoHash implementation and other general library functions unrelated to Accumulo. This sub-project contains any helper tools for geomesa. Some of these tools such as the GeneralShapefileIngest have Map/Reduce components, so the geomesa-utils JAR lives on HDFS.
-* **geomesa-web**: web services for accessing GeoMesa.
-* **geomesa-z3**: the implementation of Z3, GeoMesa's space-filling Z-order curve.
-
-## Scala console via scala-maven-plugin
-
-To test and interact with core functionality, the Scala console can be invoked in a couple of ways.  From the root directory by specifying geomesa-accumulo-datastore 
-
-    cd geomesa-accumulo
-    mvn -pl geomesa-accumulo-datastore scala:console
 
 Features
 --------
 
 Supported Data Stores
 ---------------------
+
+
 
 Geohashing and Z-curves
 -----------------------
