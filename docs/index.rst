@@ -3,10 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-The GeoMesa |version| Manual
-============================
+GeoMesa |version|
+=================
 
-Contents:
+.. image:: _static/img/geomesa-2x.png
 
 .. toctree::
    :maxdepth: 2
