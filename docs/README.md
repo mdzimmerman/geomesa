@@ -18,7 +18,9 @@ Alternatively use ``sudo`` with the ``pip`` command to install the packages in t
     $ sudo pip install sphinx
     $ sudo pip install recommonmark
 
-You also need ``make``, and if you want to build the PDF version of the manual, LaTeX:
+You also need ``make``.
+
+Optional:  if you want to build the PDF version of the manual, install LaTeX:
 
     # on Ubuntu
     $ sudo apt-get install texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended
