@@ -9,7 +9,7 @@ GeoMesa |version|
 .. image:: _static/img/geomesa-2x.png
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    
    introduction
    getting_started
