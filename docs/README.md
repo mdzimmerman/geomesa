@@ -43,7 +43,7 @@ The outputted files are written to the ``_build`` directory.
 
 ## About
 
-The root page of the documentation is ``index.rst``. Any static files included 
+The root page of the documentation is ``index.rst``. Any static files included go in the ``_static`` directory. 
 
 The files themselves are written in [reStructuredText](http://docutils.sourceforge.net/rst.html) (RST) and have ``*.rst``
 extensions. Markdown files are also supported but do not support any of Docutils or Sphinx's special directives

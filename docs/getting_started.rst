@@ -149,7 +149,7 @@ of the tools, cd into the ``bin`` directory of the binary distribution and execu
 
 .. code-block:: bash
 
-    $ cd ~/tools/geomesa-1.1.0-rc.6/bin
+    $ cd ~/tools/geomesa-$VERSION/bin
     $ ./geomesa configure
     Warning: GEOMESA_HOME is not set, using ~/tools/geomesa-1.1.0-rc.6
     Using GEOMESA_HOME as set: ~/tools/geomesa-1.1.0-rc.6
@@ -213,7 +213,7 @@ GeoMesa Tools comes with a bundled SLF4J implementation. However, if you receive
     SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
     
 download the SLF4J TAR file from http://www.slf4j.org/download.html. Extract 
-``slf4j-log4j12-1.7.7.jar`` and place it in the geomesa-1.1.0-rc.6/lib directory. 
+``slf4j-log4j12-1.7.7.jar`` and place it in the ``lib`` directory of the binary distribution. 
 
 If this conflicts with another SLF4J implementation, it may need to be removed from the lib directory.
 
