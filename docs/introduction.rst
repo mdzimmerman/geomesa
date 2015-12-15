@@ -12,39 +12,47 @@ geospatial data stored in Accumulo via standards-based OGC HTTP services and
 cluster monitoring and management tools within the GeoServer administrative
 interface. 
 
-Versions and Downloads
-----------------------
-
-## Documentation
-
-* [Quick Start](http://www.geomesa.org/geomesa-quickstart/) on the main [documentation](http://www.geomesa.org/) site.
-* [FAQ](http://www.geomesa.org/faq/)
-* [Tutorials](http://www.geomesa.org/tutorials/)
-* GeoMesa [Users](https://locationtech.org/mhonarc/lists/geomesa-users/) and [Dev](https://locationtech.org/mhonarc/lists/geomesa-dev/) mailing list archives
-* READMEs are provided under most modules: [Tools](geomesa-tools), [Jobs](geomesa-jobs), etc
-
-
 Features
 --------
+
+TODO
 
 Supported Data Stores
 ---------------------
 
-
+TODO
 
 Geohashing and Z-curves
 -----------------------
 
+TODO
+
 Data Structure
 --------------
-y default, all of the project packages in `geomesa-accumulo-datastore` are loaded along with JavaConversions, JavaConverters.
+
+TODO - or maybe under developing?
 
 Community and Support
 ---------------------
 
-<a href="https://gitter.im/locationtech/geomesa?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge" target="_blank"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/locationtech/geomesa"></img></a>
+The GeoMesa website may be found at http://www.geomesa.org/. For additional information, see:
 
-#### ![LocationTech](https://pbs.twimg.com/profile_images/2552421256/hv2oas84tv7n3maianiq_normal.png) GeoMesa is a member of the [LocationTech](http://www.locationtech.org) working group of the Eclipse Foundation.
+* The tutorials on the main GeoMesa website: http://www.geomesa.org/tutorials/
+* The GeoMesa FAQ: http://www.geomesa.org/faq/
+* The GeoMesa Users (https://locationtech.org/mhonarc/lists/geomesa-users/) and 
+  Dev (https://locationtech.org/mhonarc/lists/geomesa-dev/) mailing list archives
+* ``README.md`` files provided under most modules
+* The chat at https://gitter.im/locationtech/geomesa/.
+
+|locationtech-icon|
+
+GeoMesa is a member of the `LocationTech <http://www.locationtech.org>`_ working group of the Eclipse Foundation.
 
 License
 -------
+
+GeoMesa is open-source software, and is licensed under the Apache License Version 2.0: 
+http://apache.org/licenses/LICENSE-2.0.html
+
+.. |locationtech-icon| image:: /_static/img/locationtech.png
+

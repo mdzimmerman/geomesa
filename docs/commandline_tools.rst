@@ -4,41 +4,57 @@ Command Line Tools
 Overview
 --------
 
-GeoMesa Tools is a set of command line tools to add feature management functions, query planning and explanation, ingest, and export abilities from 
+GeoMesa Tools is a set of command line tools to add feature management
+functions, query planning and explanation, ingest, and export abilities from
 the command line.  
 
 Configuration
 -------------
 
-To begin using the command line tools, first build the full GeoMesa project from the GeoMesa source
-directory with 
+.. note:: 
+
+    ``$VERSION`` = |release| unless you have built from source.
+
+From Source
+^^^^^^^^^^^
+
+To begin using the command line tools, first build the full GeoMesa project
+from the GeoMesa source directory with 
 
 .. code-block:: bash
 
     $ mvn clean install
     
-You can also make the build process significantly faster by adding `-DskipTests`. This will create a file "geomesa-{version}-bin.tar.gz"
-in the geomesa-assemble/target directory. Untar this file with
+You can also make the build process significantly faster by adding
+`-DskipTests`. This will create the file "geomesa-$VERSION-bin.tar.gz" in the
+geomesa-assemble/target directory, which is the GeoMesa binary distribution.
+Untar this file with
 
 .. code-block:: bash
 
-    tar xvfz geomesa-assemble/target/geomesa-${version}-bin.tar.gz
-    
-Next, ``cd`` into the newly created directory with
+    tar xvfz geomesa-assemble/target/geomesa-$VERSION-bin.tar.gz
+
+From the Binary Distribution
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``cd`` into the source distribution directory with
 
 .. code-block:: bash
 
-    cd geomesa-${version}
+    cd geomesa-$VERSION
 
-GeoMesa Tools relies on a GEOMESA_HOME environment variable. Running
+GeoMesa Tools relies on a ``$GEOMESA_HOME`` environment variable. Running
 
 .. code-block:: bash
 
     . bin/geomesa configure
 
-with the ``. `` prefix will set this for you, add $GEOMESA_HOME/bin to your PATH, and source your new environment variables in your current shell session.
+with the ``.`` prefix will set this for you, add ``$GEOMESA_HOME/bin`` to your
+``$PATH``, and source your new environment variables in your current shell
+session.
 
-Now, you should be able to use GeoMesa from any directory on your computer. To test, `cd` to a different directory and run:
+Now, you should be able to use GeoMesa from any directory on your computer. To
+test, ``cd`` to a different directory and run:
 
 .. code-block:: bash
 
@@ -162,11 +178,10 @@ Due to licensing restrictions, a number of necessary dependencies required for r
     </dependency>
 
 
-To install, you can either locate the jar files or run the two following included scripts which will attempt to wget and install the jars.
+To install, you can either locate the jar files or run the two following included scripts which will attempt to wget and install the jars::
 
-`$GEOMESA_HOME/bin/install-jai`
- 
-`$GEOMESA_HOME/bin/install-vecmath`
+    $ $GEOMESA_HOME/bin/install-jai`
+    $ $GEOMESA_HOME/bin/install-vecmath`
 
 Logging configuration
 ^^^^^^^^^^^^^^^^^^^^^
@@ -348,7 +363,8 @@ describe
 
 To describe the attributes of a feature on a specified catalog table, use the `describe` command.  
 
-####Usage (required options denoted with star):
+Usage (required options denoted with star)::
+
     $ geomesa help describe
     Describe the attributes of a given feature in GeoMesa
     Usage: describe [options]
@@ -374,7 +390,7 @@ To describe the attributes of a feature on a specified catalog table, use the `d
            Zookeepers (host[:port], comma separated)
 
       
-Example command:
+Example command::
 
     geomesa describe -u username -p password -c test_delete -fn testing
  
@@ -539,8 +555,6 @@ Usage (required options denoted with star)::
 
 Example commands::
 
-##### Ingest CSV with single WKT (Well Known Text) geometry
-
     $ cat example1.csv
     ID,Name,Age,LastSeen,Friends,Lat,Lon
     23623,Harry,20,2015-05-06,"Will, Mark, Suzan",-100.236523,23
@@ -583,11 +597,9 @@ Example commands::
     # ingest command
     geomesa ingest -u username -p password -c geomesa_catalog -i inst -conf example1.conf hdfs:///some/hdfs/path/to/file.csv
 
-##### Converter Config
+For more documentation on converter configuration, check out the geomesa-convert ``README.md`` file.
 
-For more documentation on converter configuration, check out the geomesa-convert README
-
-##### Ingest a shape file
+Ingest a shape file:: 
     geomesa ingest -u username -p password -c test_catalog -f shapeFileFeatureName /some/path/to/file.shp
 
 ingestraster
@@ -614,7 +626,8 @@ from where they are ingested.
     before ingestion. An example of doing conversion with GDAL utility is
     ``gdalwarp -t_srs EPSG:4326 input_file out_file``.
 
-####Usage (required options denoted with star):
+Usage (required options denoted with star)::
+
     $ geomesa help ingestraster
     Ingest a raster file or files in a directory into GeoMesa
     Usage: ingestraster [options]
@@ -656,15 +669,18 @@ from where they are ingested.
            Zookeepers (host[:port], comma separated)
 
 
-#### Example commands:
-    geomesa ingestraster -u username -p password -t geomesa_raster -f /some/local/path/to/raster.tif
+Example commands::
 
+    geomesa ingestraster -u username -p password -t geomesa_raster -f /some/local/path/to/raster.tif
     geomesa ingestraster -u username -p password -t geomesa_raster -ck -cs 1000 -m distributed -f /some/path/to/raster.tif
 
-### list
+list
+^^^^
+
 To list the features on a specified catalog table, use the `list` command.  
 
-####Usage (required options denoted with star):
+Usage (required options denoted with star)::
+    
     $ geomesa help list
     List GeoMesa features for a given catalog
     Usage: list [options]
@@ -689,6 +705,7 @@ To list the features on a specified catalog table, use the `list` command.
 
 
 Example command::
+
     geomesa list -u username -p password -c test_catalog
     
 querystats

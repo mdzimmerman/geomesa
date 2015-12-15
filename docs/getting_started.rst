@@ -28,9 +28,9 @@ Versions and Downloads
 
 .. note::
 
-    The current recommended version is |version|.
+    The current recommended version is |release|.
 
-**Latest release**: 1.1.0-rc.6
+**Latest release**: |release|
 
 * Release tarball: http://repo.locationtech.org/content/repositories/geomesa-releases/org/locationtech/geomesa/geomesa-assemble/1.1.0-rc.6/geomesa-assemble-1.1.0-rc.6-bin.tar.gz
 * Source: https://github.com/locationtech/geomesa/archive/geomesa-1.1.0-rc.6.tar.gz
@@ -48,11 +48,13 @@ GeoMesa artifacts can be downloaded from the LocationTech Maven repository: http
 
 Snapshots are available in the LocationTech Snapshots Repositor: https://repo.locationtech.org/content/repositories/geomesa-snapshots/.
 
+.. _install_binary:
+
 Installing from the Binary Distribution
 ---------------------------------------
 
 GeoMesa artifacts are available for download or can be built from source. 
-The easiest way to get started is to download the most recent binary version (|version|) 
+The easiest way to get started is to download the most recent binary version (``$VERSION`` = |release|) 
 and untar it somewhere convenient.
 
 .. code-block:: bash
@@ -61,16 +63,22 @@ and untar it somewhere convenient.
     $ cd ~/tools
 
     # download and unpackage the most recent distribution
-    $ wget http://repo.locationtech.org/content/repositories/geomesa-releases/org/locationtech/geomesa/geomesa-assemble/$GEOMESA_VERSION/geomesa-assemble-$GEOMESA_VERSION-bin.tar.gz
-    $ tar xvf geomesa-assemble-$GEOMESA_VERSION-bin.tar.gz
-    $ cd geomesa-$GEOMESA_VERSION
+    $ wget http://repo.locationtech.org/content/repositories/geomesa-releases/org/locationtech/geomesa/geomesa-assemble/$VERSION/geomesa-assemble-$VERSION-bin.tar.gz
+    $ tar xvf geomesa-assemble-$VERSION-bin.tar.gz
+    $ cd geomesa-$VERSION
     $ ls
     bin  dist  docs  lib  LICENSE.txt  README.md
+
+.. _building_source:
 
 Building from Source
 --------------------
 
+These development tools are required:
 
+* `Java JDK 7 <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`_,
+* `Apache Maven <http://maven.apache.org/>`_ 3.2.2 or better, and
+* `Git <https://git-scm.com/>`_.
 
 The GeoMesa source distribution may be cloned from GitHub:
 
@@ -78,6 +86,14 @@ The GeoMesa source distribution may be cloned from GitHub:
 
     $ git clone https://github.com/locationtech/geomesa.git
     $ cd geomesa
+
+This downloads the latest development version. To check out the code for the latest stable release
+(``$VERSION`` = |release|):
+
+.. code-block:: bash
+
+    $ git checkout tags/geomesa-$VERSION -b geomesa-$VERSION 
+
 
 Building and dependency management for GeoMesa is handled by Maven (http://maven.apache.org/). 
 The Maven ``pom.xml`` file in the root directory of the source distribution contains an explicit
@@ -102,6 +118,13 @@ If the property is omitted, support for Accumulo 1.6 is assumed:
 
     $ mvn clean install
 
+The `skipTests` property may be used to speed compilation. Set it to ``true``
+to omit the test phase of the build process:
+
+.. code-block:: bash
+
+    $ mvn clean install -DskipTests=true
+
 The ``build/mvn`` script is a wrapper around Maven that builds the project using the Zinc
 (https://github.com/typesafehub/zinc) incremental compiler:
 
@@ -113,25 +136,31 @@ The ``build/mvn`` script is a wrapper around Maven that builds the project using
 Setting up the Command Line Tools
 ---------------------------------
 
-GeoMesa comes with a set of command line tools for managing features, which are configured to
-work with the binary distribution of 
+.. note::
 
-To complete the setup of the tools, cd into the ``bin`` directory and execute ``geomesa configure``:
+    The instructions for setting up the command line tools assumes the use of the 
+    binary GeoMesa distribution. If you have built GeoMesa from source (see :ref:`building_source`),
+    use the ``geomesa-assemble/assemble.sh`` script to bundle a tarball of the binary
+    distribution.
+
+GeoMesa comes with a set of command line tools for managing features. To complete the setup 
+of the tools, cd into the ``bin`` directory of the binary distribution and execute 
+``geomesa configure``:
 
 .. code-block:: bash
 
-    $ cd ~/tools/geomesa-{{version}}/bin
+    $ cd ~/tools/geomesa-1.1.0-rc.6/bin
     $ ./geomesa configure
-    Warning: GEOMESA_HOME is not set, using ~/tools/geomesa-{{version}}
-    Using GEOMESA_HOME as set: ~/tools/geomesa-{{version}}
+    Warning: GEOMESA_HOME is not set, using ~/tools/geomesa-1.1.0-rc.6
+    Using GEOMESA_HOME as set: ~/tools/geomesa-1.1.0-rc.6
     Is this intentional? Y\n Y
     Warning: GEOMESA_LIB already set, probably by a prior configuration.
-    Current value is ~/tools/geomesa-{{version}}/lib.
+    Current value is ~/tools/geomesa-1.1.0-rc.6/lib.
 
     Is this intentional? Y\n Y
 
     To persist the configuration please update your bashrc file to include: 
-    export GEOMESA_HOME=/tools/geomesa-{{version}}
+    export GEOMESA_HOME=/tools/geomesa-1.1.0-rc.6
     export PATH=${GEOMESA_HOME}/bin:$PATH
 
 Update and re-source your ``~/.bashrc`` file to include the $GEOMESA_HOME and $PATH updates.
@@ -144,7 +173,8 @@ Install GPL software:
     $ bin/install-jline
     $ bin/install-vecmath
 
-Finally, test your installation:
+Finally, test your installation by editing the ``bin/test-geomesa`` file with configuration
+data specific to your setup and running it: 
 
 .. code-block:: bash
 
@@ -155,7 +185,7 @@ Test the GeoMesa Tools:
 .. code-block:: bash
 
     $ geomesa
-    Using GEOMESA_HOME = /path/to/geomesa-{{version}}
+    Using GEOMESA_HOME = /path/to/geomesa-1.1.0-rc.6
     Usage: geomesa [command] [command options]
       Commands:
         create           Create a feature definition in a GeoMesa catalog
@@ -183,7 +213,7 @@ GeoMesa Tools comes with a bundled SLF4J implementation. However, if you receive
     SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
     
 download the SLF4J TAR file from http://www.slf4j.org/download.html. Extract 
-``slf4j-log4j12-1.7.7.jar`` and place it in the geomesa-{{version}}/lib directory. 
+``slf4j-log4j12-1.7.7.jar`` and place it in the geomesa-1.1.0-rc.6/lib directory. 
 
 If this conflicts with another SLF4J implementation, it may need to be removed from the lib directory.
 
@@ -202,77 +232,42 @@ The ``$GEOMESA_HOME/dist`` directory contains the distributed runtime jar that s
 Configuring for Kafka
 ---------------------
 
-These development tools are required:
+To install the Kafka module, you will need to build GeoMesa from source (see :ref:`building_source`). 
+Build the ``geomesa-kafka`` submodule:
 
-* [Java JDK 7](http://www.oracle.com/technetwork/java/javase/downloads/index.html),
-* [Apache Maven](http://maven.apache.org/) 3.2.2 or better, and
-* [Git](https://git-scm.com/).
+.. code-block:: bash
 
-To set up GeoMesa with Kafka, download the Geomesa source distribution that matches the binary distribution described above:
-
-{% highlight bash %}
-$ git clone https://github.com/locationtech/geomesa/
-$ git checkout tags/geomesa-{{ site.stableVersion }} -b geomesa-{{ site.stableVersion }} 
-{% endhighlight %}
-
-Then build the geomesa-kafka submodule (see the [Kafka Quickstart tutorial](/geomesa-kafka-quickstart/) to see what GeoMesa can do with Kafka).
-
-{% highlight bash %}
-$ mvn clean install -f geomesa/geomesa-kafka/pom.xml -DskipTests
-{% endhighlight %}
-
-Copy the GeoMesa Kafka plugin JAR files from the GeoMesa directory you built into your GeoServer's library directory. 
-
-Tomcat:
-{% highlight bash %}
-cp geomesa/geomesa-kafka/geomesa-kafka-geoserver-plugin/target/geomesa-kafka-geoserver-plugin-{{ site.stableVersion }}-geoserver-plugin.jar /path/to/tomcat/webapps/geoserver/WEB-INF/lib/
-{% endhighlight %}
-
-Jetty:
-{% highlight bash %}
-cp geomesa/geomesa-kafka/geomesa-kafka-geoserver-plugin/target/geomesa-kafka-geoserver-plugin-{{ site.stableVersion }}-geoserver-plugin.jar /path/to/jetty/geoserver-2.5.2/webapps/geoserver/WEB-INF/lib/
-{% endhighlight %}
-
-Then copy these dependencies to your `WEB-INF/lib` directory.
-
-* Kafka
-    * kafka-clients-0.8.2.1.jar
-    * kafka_2.10-0.8.2.1.jar
-    * metrics-core-2.2.0.jar
-    * zkclient-0.3.jar
-* Zookeeper
-    * zookeeper-3.4.5.jar
-
-Note: when using the Kafka Data Store with GeoServer in Tomcat it will most likely be necessary to increase the memory settings for Tomcat, `export CATALINA_OPTS="-Xms512M -Xmx1024M -XX:PermSize=256m -XX:MaxPermSize=256m"`.
-
-After placing the dependencies in the correct folder, be sure to restart GeoServer for changes to take place.
-
+    $ mvn clean install -f geomesa/geomesa-kafka/pom.xml -DskipTests
 
 
 Installing the GeoMesa GeoServer plugin
 ---------------------------------------
 
-In addition to our GeoServer plugin, you will also need to install the WPS plugin to your GeoServer
+In addition to the GeoServer plugin, you will also need to install the WPS plugin to your GeoServer
 instance. The GeoServer WPS Plugin (available at 
 http://docs.geoserver.org/stable/en/user/extensions/wps/install.html) must also match the version of
-GeoServer instance.
+GeoServer instance. This is needed for both the Accumulo and Kafka variants of the plugin.
 
-Copy the ``geomesa-plugin-1.1.0-rc.7-SNAPSHOT-geoserver-plugin.jar`` jar file from the GeoMesa dist directory into your GeoServer's library directory.
+For Accumulo
+^^^^^^^^^^^^
+
+.. note:: 
+
+    ``$VERSION`` = |release| unless you have built from source.
+
+Copy the ``geomesa-$VERSION-geoserver-plugin.jar`` jar file from the GeoMesa dist directory into your GeoServer's library directory.
 
 If you are using tomcat:
 
 .. code-block:: bash
 
-    $ cp $GEOMESA_HOME/dist/geomesa-plugin-{{version}}-geoserver-plugin.jar /path/to/tomcat/webapps/geoserver/WEB-INF/lib/
+    $ cp $GEOMESA_HOME/dist/geomesa-plugin-$VERSION-geoserver-plugin.jar /path/to/tomcat/webapps/geoserver/WEB-INF/lib/
 
 If you are using GeoServer's built in Jetty web server:
 
 .. code-block:: bash
 
-    $ cp $GEOMESA_HOME/dist/geomesa-plugin-{{version}}-geoserver-plugin.jar /path/to/geoserver-2.5.2/webapps/geoserver/WEB-INF/lib/
-
-Additional dependencies
-^^^^^^^^^^^^^^^^^^^^^^^
+    $ cp $GEOMESA_HOME/dist/geomesa-plugin-$VERSION-geoserver-plugin.jar /path/to/geoserver-2.5.2/webapps/geoserver/WEB-INF/lib/
 
 There are additional JARs that are specific to your installation that you will also need to 
 copy to GeoServer's ``WEB-INF/lib`` directory. There is a script located at 
@@ -321,6 +316,33 @@ There are also GeoServer JARs that need to be updated for Accumulo (also in the 
     
 * **commons-configuration**: Accumulo requires commons-configuration 1.6 and previous versions should be replaced [`commons-configuration-1.6.jar <https://search.maven.org/remotecontent?filepath=commons-configuration/commons-configuration/1.6/commons-configuration-1.6.jar>`_]
 * **commons-lang**: GeoServer ships with commons-lang 2.1, but Accumulo requires replacing that with version 2.4 [`commons-lang-2.4.jar <https://search.maven.org/remotecontent?filepath=commons-lang/commons-lang/2.4/commons-lang-2.4.jar>`_]
+
+For Kafka
+^^^^^^^^^
+
+Copy the GeoMesa Kafka plugin JAR files from the GeoMesa directory you built into your GeoServer's library directory. 
+
+Tomcat::
+
+    $ cp geomesa/geomesa-kafka/geomesa-kafka-geoserver-plugin/target/geomesa-kafka-geoserver-plugin-$VERSION-geoserver-plugin.jar /path/to/tomcat/webapps/geoserver/WEB-INF/lib/
+
+GeoServer's built-in Jetty web server::
+
+    $ cp geomesa/geomesa-kafka/geomesa-kafka-geoserver-plugin/target/geomesa-kafka-geoserver-plugin-$VERSION-geoserver-plugin.jar /path/to/jetty/geoserver-2.5.2/webapps/geoserver/WEB-INF/lib/
+
+Then copy these dependencies to your `WEB-INF/lib` directory.
+
+* Kafka
+    * kafka-clients-0.8.2.1.jar
+    * kafka_2.10-0.8.2.1.jar
+    * metrics-core-2.2.0.jar
+    * zkclient-0.3.jar
+* Zookeeper
+    * zookeeper-3.4.5.jar
+
+Note: when using the Kafka Data Store with GeoServer in Tomcat it will most likely be necessary to increase the memory settings for Tomcat, `export CATALINA_OPTS="-Xms512M -Xmx1024M -XX:PermSize=256m -XX:MaxPermSize=256m"`.
+
+After placing the dependencies in the correct folder, be sure to restart GeoServer for changes to take place.
 
 Upgrading
 ---------
