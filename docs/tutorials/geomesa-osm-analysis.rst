@@ -222,7 +222,7 @@ GeoServer Setup
 ~~~~~~~~~~~~~~~
 
 Follow the instructions in the `GeoMesa Deployment
-Tutorial </geomesa-deployment/>`__ to install the GeoMesa plugin for
+Tutorial </geomesa-deployment/>`_ to install the GeoMesa plugin for
 GeoServer.
 
 Register the GeoMesa DataStore with Geoserver

@@ -6,12 +6,11 @@ Prerequisites and Platform
 
 .. warning::
 
-    GeoMesa requires Accumulo (http://accumulo.apache.org/) 1.5 or 1.6, which in turn
-    requires Hadoop (http://hadoop.apache.org/) 2.2 or better and ZooKeeper (http://zookeeper.apache.org) 
-    3.4.5 or better. Installing and configuring Accumulo is beyond the scope of this tutorial.
+    GeoMesa requires Accumulo (http://accumulo.apache.org/) |accumulo_version|, which in turn
+    requires Hadoop (http://hadoop.apache.org/) |hadoop_version| and ZooKeeper (http://zookeeper.apache.org) 
+    |zookeeper_version|. Installing and configuring Accumulo is beyond the scope of this manual.
 
-    Using the Kafka (http://kafka.apache.org/) module requires Kafka 0.8.2 and ZooKeeper 3.4.5
-    or better.  
+    Using the Kafka (http://kafka.apache.org/) module requires Kafka |kafka_version| and ZooKeeper |zookeeper_version|.  
 
 To install the binary distribution:
 
@@ -20,7 +19,7 @@ To install the binary distribution:
 To build and install the source distribution:
 
 * Java JDK 7
-* Apache Maven (http://maven.apache.org/) 3.2.2 or better
+* Apache Maven (http://maven.apache.org/) |maven_version|
 * A ``git`` client (http://git-scm.com/)
 
 Versions and Downloads
@@ -32,10 +31,12 @@ Versions and Downloads
 
 **Latest release**: |release|
 
+.. TODO: substitutions don't work in some kinds of markup, including URLs
+
 * Release tarball: http://repo.locationtech.org/content/repositories/geomesa-releases/org/locationtech/geomesa/geomesa-assemble/1.1.0-rc.6/geomesa-assemble-1.1.0-rc.6-bin.tar.gz
 * Source: https://github.com/locationtech/geomesa/archive/geomesa-1.1.0-rc.6.tar.gz
 
-**Development version (source only)**: 1.1.0-rc.7-SNAPSHOT
+**Development version (source only)**: |development|
 
 * Source: https://github.com/locationtech/geomesa/archive/master.tar.gz
 
